@@ -1,7 +1,22 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { fetchMovieCredits } from "../services/api";
+import { useParams } from "react-router-dom";
 
 const MovieCast = () => {
-  return <div></div>;
+  const { movieId } = useParams();
+  const [cast, setCast] = useState([]);
+
+  useEffect(() => {
+    fetchMovieCredits(movieId).then(setCast);
+  }, [movieId]);
+
+  return (
+    <ul>
+      {cast.map((actor) => (
+        <li key={actor.cast_id}>{actor.name}</li>
+      ))}
+    </ul>
+  );
 };
 
 export default MovieCast;
