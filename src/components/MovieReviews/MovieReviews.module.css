@@ -1,0 +1,15 @@
+/* src/components/MovieReviews/MovieReviews.module.css */
+/* .reviewList {
+    padding: 10px;
+  }
+  
+  .reviewItem {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  } */
+
+.loading {
+  color: red;
+}

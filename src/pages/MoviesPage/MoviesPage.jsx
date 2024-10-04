@@ -1,28 +1,45 @@
-import { useState } from "react";
-import { searchMovies } from "../services/api";
-import MovieList from "../components/MovieList";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { fetchSearch } from "../../services/api";
+import SearchMovie from "../../components/SearchMovie/SearchMovie";
+import MovieList from "../../components/MovieList/MovieList";
 
 const MoviesPage = () => {
-  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    searchMovies(query).then(setMovies);
+  const handleChangeQuery = (newQuery) => {
+    setSearchParams({ query: newQuery });
   };
+
+  const searchQuery = searchParams.get("query");
+
+  useEffect(() => {
+    if (!searchQuery) return;
+    const getDeta = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchSearch(searchQuery);
+        setMovies(data.results);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getDeta();
+  }, [searchQuery]);
 
   return (
     <div>
-      <h1>Search Movies</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
-      <MovieList movies={movies} />
+      {isLoading && <p>Loading</p>}
+      {error && <p>404</p>}
+      <SearchMovie handleChangeQuery={handleChangeQuery} />
+      {movies.length > 0 && <MovieList movies={movies} />}
     </div>
   );
 };

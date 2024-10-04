@@ -1,59 +1,38 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://api.themoviedb.org/3/";
-axios.defaults.headers.common["Authorization"] =
-  "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlZGMxYmJiY2Y0ZDMzNmIyMzViMzJlNDQzYjk4YTEzYiIsIm5iZiI6MTcyNzYzNTQxNS40Mzk3NDgsInN1YiI6IjY2Zjk5ZTVlMGExMjIxNTYzMWNjNjY2NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gKkLypAMPqxcRGyrV7LlFDjXMu0viE2ikiqPQ8KSKs4";
+axios.defaults.baseURL = "https://api.themoviedb.org/3";
 
-// Функция для получения трендовых фильмов
-export const fetchTrendingMovies = async () => {
-  const response = await axios.get("trending/movie/day", {
-    params: {
-      language: "en-US",
-    },
-  });
-  return response.data.results;
+const options = {
+  headers: {
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYzljMjRjNzRhOTI1MGE0OTQ5N2FiMzFiNzA4ODZjMSIsIm5iZiI6MTcyNzcyMjg5NC42MTkyNDksInN1YiI6IjY2ZmFjNDdmM2EwZjVhMDhjOGYxOTRlNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.iJTxyONf3SgpKOGDBLrO36peCKNtCxKLIMaplw9hWYo",
+  },
 };
 
-// Функция для поиска фильмов по запросу
-export const searchMovies = async (query) => {
-  const response = await axios.get("search/movie", {
-    params: {
-      language: "en-US",
-      include_adult: "false",
-      page: "1",
-      query,
-    },
-  });
-  return response.data.results;
-};
-
-// Функция для получения деталей фильма по ID
-export const fetchMovieDetails = async (movieId) => {
-  const response = await axios.get(`movie/${movieId}`, {
-    params: {
-      language: "en-US",
-    },
-  });
+export const fetchMovie = async () => {
+  const response = await axios.get("trending/movie/day", options);
   return response.data;
 };
 
-// Функция для получения актерского состава
-export const fetchMovieCredits = async (movieId) => {
-  const response = await axios.get(`movie/${movieId}/credits`, {
-    params: {
-      language: "en-US",
-    },
-  });
+export const fetchMovieById = async (movieId) => {
+  const response = await axios.get(`movie/${movieId}`, options);
+  return response.data;
+};
+
+export const fetchMovieCast = async (movieId) => {
+  const response = await axios.get(`movie/${movieId}/credits`, options);
   return response.data.cast;
 };
 
-// Функция для получения обзоров на фильм
 export const fetchMovieReviews = async (movieId) => {
-  const response = await axios.get(`movie/${movieId}/reviews`, {
-    params: {
-      language: "en-US",
-      page: "1",
-    },
-  });
+  const response = await axios.get(`movie/${movieId}/reviews`, options);
   return response.data.results;
+};
+
+export const fetchSearch = async (query) => {
+  const response = await axios.get(
+    `search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
+    options
+  );
+  return response.data;
 };

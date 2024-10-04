@@ -1,0 +1,14 @@
+.input {
+  width: 300px;
+  border-color: rgba(2, 49, 104, 0.37);
+  border-style: groove;
+  border-radius: 22px;
+  margin-right: 10px;
+}
+
+.btn {
+  background-color: rgb(77, 165, 42);
+  color: aliceblue;
+  border-radius: 22px;
+  min-width: 56px;
+}
